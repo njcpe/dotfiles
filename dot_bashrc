@@ -1,0 +1,561 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto -n'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias lt='ls -At1 && echo "------Oldest--"'
+alias ltr='ls -Art1 && echo "------Newest--"'
+alias lS='ls -S'
+
+
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+#if ! shopt -oq posix; then  
+#if [ -f /usr/share/bash-completion/bash_completion ]; then
+#    . /usr/share/bash-completion/bash_completion
+#  elif [ -f /etc/bash_completion ]; then
+#    . /etc/bash_completion
+#  fi
+#fi
+
+# added by Anaconda3 installer
+#export PATH="/home/noah/anaconda3/bin:$PATH"
+export PATH="/home/noah/.symlinks:$PATH"
+
+export JAVA_HOME
+PATH=$PATH:$JAVA_HOME
+export PATH
+
+#Matlab Path append
+export PATH="/usr/local/MATLAB/R2017a/bin:$PATH"
+
+#alias matlab="matlab &"
+alias matlab="matlab -nodesktop"
+
+# Useful (Stolen) aliases
+alias ports='netstat -tulanp'
+alias h='history'
+alias j='jobs -l'
+alias diff='colordiff'
+alias mount='mount |column -t'
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias e='env|grep -Ei'
+alias c='clear'
+
+# Stop after sending count ECHO_REQUEST packets #
+alias ping='ping -c 5'
+# Do not wait interval 1 second, go fast #
+alias fastping='ping -c 100 -s.2'
+
+## get rid of command not found ##
+alias cd..='cd ..'
+ 
+## a quick way to get out of current directory ##
+alias ..='cd ..'
+alias ...='cd ../../../'
+alias ....='cd ../../../../'
+alias .....='cd ../../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../..'
+
+alias df='df -h'
+dirsize() {
+    du -hs $* | sort -h
+}
+
+alias du=dirsize
+
+alias cp='cp -i'
+alias mv='mv -i'
+alias mkdir='mkdir -p -v'
+alias biggest='BLOCKSIZE=1048576; du -x | sort -nr | head -10'
+
+# Android Dev aliases
+alias adb='sudo adb'
+alias adbr='adb kill-server; adb start-server'
+alias studio='/usr/local/bin/studio . & '
+
+#BoxSync
+alias box='~/repos/box-linux-sync/bin/box-sync'
+
+#Forbidden Aliases
+alias discline='~/repos/Discline/Discline.py'
+
+
+
+#Spark
+#alias clear='clear; echo; echo; seq 1 $(tput cols) | sort -R | spark; echo; echo'          # Non coloured
+
+#Conda
+alias aenv='conda activate'
+alias denv='conda deactivate'
+alias tfclone='conda create --clone tf_build --name'
+
+#Other
+alias rst='exec bash'
+alias emacs='emacs -nw'
+alias zen='python -c "import this"'
+alias xopen='xdg-open'
+
+#git extra-extras
+alias g='git'
+alias gch='git checkout'
+alias gco='git commit'
+alias gcl='git clone'
+alias gd='git diff'
+alias gs='git status -sb'
+alias gi='git ignore'
+alias ga='git add'
+alias gp='git push'
+
+alias addr='ifconfig | grep "inet addr" -m 1'
+
+#chrome
+alias chr='nohup google-chrome'
+
+#go-lang
+export GOPATH=$HOME/gocode
+export PATH=$PATH:$(go env GOPATH)/bin
+export GOPATH=$(go env GOPATH)
+export JAVA_HOME="/usr/lib/jvm/java-8-oracle/"
+
+
+#Tensorflow
+export tfcputools=$HOME/tensorflow_builds/tf_cpu/tensorflow/bazel-bin/tensorflow/tools
+export tfgputools=$HOME/tensorflow_builds/tf_gpu/tensorflow/bazel-bin/tensorflow/tools
+#export PATH=$PATH:$TF_TOOLS/benchmark:$TF_TOOLS/graph_transforms
+
+#CUDNN
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64"
+export CUDA_HOME=/usr/local/cuda
+export PATH="$PATH:/usr/local/cuda/bin"
+
+#Powerline Go function
+function _update_ps1() {
+    PS1="$($GOPATH/bin/powerline-go -colorize-hostname -error $? -cwd-max-depth 2 -cwd-max-dir-size 10 -duration -newline -modules "venv,cwd,perms,git,hg,jobs,root")"
+}
+
+export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/bash-history-$(date "+%Y-%m-%d").log; fi'
+
+
+if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
+    export PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
+
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# Don't complete a Tab press on an empty line with every possible command
+shopt -s no_empty_cmd_completion
+# Use programmable completion, if available
+shopt -s progcomp
+# Correct small errors in directory names given to the `cd` builtin
+shopt -s cdspell
+# Update LINES and COLUMNS after each command if necessary
+shopt -s checkwinsize
+# Include filenames with leading dots in pattern matching
+shopt -s dotglob
+# Enable extended globbing: !(foo), ?(bar|baz)...
+shopt -s extglob
+# Append history to $HISTFILE rather than overwriting it
+shopt -s histappend
+# If history expansion fails, reload the command to try again
+shopt -s histreedit
+# Load history expansion result as the next command, don't run them directly
+shopt -s histverify
+
+# These options only exist since Bash 4.0-alpha
+if ((BASH_VERSINFO[0] >= 4)) ; then
+
+    # Correct small errors in directory names during completion
+    shopt -s dirspell
+    # Allow double-star globs to match files and recursive paths
+    shopt -s globstar
+
+    # Warn me about stopped jobs when exiting
+    # Available since 4.0, but only set it if >=4.1 due to bug:
+    # <https://lists.gnu.org/archive/html/bug-bash/2009-02/msg00176.html>
+    ((BASH_VERSINFO[1] >= 1)) && shopt -s checkjobs
+
+    # Expand variables in directory completion
+    # Only available since 4.3
+    ((BASH_VERSINFO[1] >= 3)) && shopt -s direxpand
+fi
+
+# some usefull functions
+extract () {
+  if [ -f $1 ] ; then
+      case $1 in
+          *.tar.bz2)   tar xvjf $1    ;;
+          *.tar.gz)    tar xvzf $1    ;;
+          *.bz2)       bunzip2 $1     ;;
+          *.rar)       rar x $1       ;;
+          *.gz)        gunzip $1      ;;
+          *.tar)       tar xvf $1     ;;
+          *.tbz2)      tar xvjf $1    ;;
+          *.tgz)       tar xvzf $1    ;;
+          *.zip)       unzip $1       ;;
+          *.Z)         uncompress $1  ;;
+          *.7z)        7z x $1        ;;
+          *)           echo "don't know how to extract '$1'..." ;;
+      esac
+  else
+      echo "'$1' is not a valid file!"
+  fi
+}
+
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+#if ! shopt -oq posix; then  
+#if [ -f /usr/share/bash-completion/bash_completion ]; then
+#    . /usr/share/bash-completion/bash_completion
+#  elif [ -f /etc/bash_completion ]; then
+#    . /etc/bash_completion
+#  fi
+#fi
+
+# added by Anaconda3 installer
+#export PATH="/home/noah/anaconda3/bin:$PATH"
+export PATH="/home/noah/.symlinks:$PATH"
+
+export JAVA_HOME
+PATH=$PATH:$JAVA_HOME
+export PATH
+
+#Matlab Path append
+export PATH="/usr/local/MATLAB/R2017a/bin:$PATH"
+
+#alias matlab="matlab &"
+alias matlabnd="matlab -nodesktop"
+
+# Useful (Stolen) aliases
+alias ports='netstat -tulanp'
+alias h='history'
+alias j='jobs -l'
+alias diff='colordiff'
+alias mount='mount |column -t'
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias e='env|grep -Ei'
+alias c='clear'
+
+# Stop after sending count ECHO_REQUEST packets #
+alias ping='ping -c 5'
+# Do not wait interval 1 second, go fast #
+alias fastping='ping -c 100 -s.2'
+
+## get rid of command not found ##
+alias cd..='cd ..'
+ 
+## a quick way to get out of current directory ##
+alias ..='cd ..'
+alias ...='cd ../../../'
+alias ....='cd ../../../../'
+alias .....='cd ../../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../..'
+
+alias df='df -h'
+dirsize() {
+    du -hs $* | sort -h
+}
+
+alias du=dirsize
+
+alias cp='cp -i'
+alias mv='mv -i'
+alias mkdir='mkdir -p -v'
+alias biggest='BLOCKSIZE=1048576; du -x | sort -nr | head -10'
+
+# Android Dev aliases
+alias adb='sudo adb'
+alias adbr='adb kill-server; adb start-server'
+alias studio='/usr/local/bin/studio . & '
+
+#BoxSync
+alias box='~/repos/box-linux-sync/bin/box-sync'
+
+#Forbidden Aliases
+alias discline='~/repos/Discline/Discline.py'
+
+
+
+#Spark
+#alias clear='clear; echo; echo; seq 1 $(tput cols) | sort -R | spark; echo; echo'          # Non coloured
+
+#Conda
+alias aenv='conda activate'
+alias denv='conda deactivate'
+alias tfclone='conda create --clone tf_build --name'
+
+#Other
+alias rst='exec bash'
+alias emacs='emacs -nw'
+alias zen='python -c "import this"'
+alias xopen='xdg-open'
+
+#git extra-extras
+alias g='git'
+alias gs='git status -sb'
+alias gi='git ignore'
+alias ga='git add'
+alias addr='ifconfig | grep "inet addr" -m 1'
+alias gp='cat ~/.github_token | xclip -selection c; git push'
+
+#chrome
+alias chr='nohup google-chrome'
+
+#go-lang
+export GOPATH=$HOME/gocode
+export PATH=$PATH:$(go env GOPATH)/bin
+export GOPATH=$(go env GOPATH)
+export JAVA_HOME="/usr/lib/jvm/java-8-oracle/"
+
+
+#Tensorflow
+export tfcputools=$HOME/tensorflow_builds/tf_cpu/tensorflow/bazel-bin/tensorflow/tools
+export tfgputools=$HOME/tensorflow_builds/tf_gpu/tensorflow/bazel-bin/tensorflow/tools
+#export PATH=$PATH:$TF_TOOLS/benchmark:$TF_TOOLS/graph_transforms
+
+#CUDNN
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64"
+export CUDA_HOME=/usr/local/cuda
+export PATH="$PATH:/usr/local/cuda/bin"
+
+#Powerline Go function
+function _update_ps1() {
+    PS1="$($GOPATH/bin/powerline-go -colorize-hostname -error $? -cwd-max-depth 2 -cwd-max-dir-size 10 -duration -newline -modules "venv,user,ssh,cwd,perms,git,hg,jobs,root")"
+}
+
+export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/bash-history-$(date "+%Y-%m-%d").log; fi'
+
+
+if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
+    export PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
+
+HISTCONTROL=ignoreboth
+
+
+# Append history to $HISTFILE rather than overwriting it
+shopt -s histappend
+# If history expansion fails, reload the command to try again
+shopt -s histreedit
+# Load history expansion result as the next command, don't run them directly
+shopt -s histverify
+
+# These options only exist since Bash 4.0-alpha
+if ((BASH_VERSINFO[0] >= 4)) ; then
+
+    # Correct small errors in directory names during completion
+    shopt -s dirspell
+    # Allow double-star globs to match files and recursive paths
+    shopt -s globstar
+
+    # Warn me about stopped jobs when exiting
+    # Available since 4.0, but only set it if >=4.1 due to bug:
+    # <https://lists.gnu.org/archive/html/bug-bash/2009-02/msg00176.html>
+    ((BASH_VERSINFO[1] >= 1)) && shopt -s checkjobs
+
+    # Expand variables in directory completion
+    # Only available since 4.3
+    ((BASH_VERSINFO[1] >= 3)) && shopt -s direxpand
+fi
+
+# some usefull functions
+extract () {
+  if [ -f $1 ] ; then
+      case $1 in
+          *.tar.bz2)   tar xvjf $1    ;;
+          *.tar.gz)    tar xvzf $1    ;;
+          *.bz2)       bunzip2 $1     ;;
+          *.rar)       rar x $1       ;;
+          *.gz)        gunzip $1      ;;
+          *.tar)       tar xvf $1     ;;
+          *.tbz2)      tar xvjf $1    ;;
+          *.tgz)       tar xvzf $1    ;;
+          *.zip)       unzip $1       ;;
+          *.Z)         uncompress $1  ;;
+          *.7z)        7z x $1        ;;
+          *)           echo "don't know how to extract '$1'..." ;;
+      esac
+  else
+      echo "'$1' is not a valid file!"
+  fi
+}
+
+# Runs a ls immediately when you're inside a file. 
+cl() {
+ if [ -d $1 ] ; then
+	cd $1
+	ls 
+ else
+	echo "'$1' not a dir..."
+ fi
+}
+
+source /opt/ros/melodic/setup.bash
+source ~/catkin_ws/devel/setup.bash
+export LD_LIBRARY_PATH=/usr/local/lib:/home/noah/catkin_ws/devel/lib:/opt/ros/melodic/lib:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
+source /usr/share/gazebo/setup.sh
+
+search() {
+    if [ -z "$1" ]; then
+	echo "No argument supplied"
+    elif [ ! -f $1 ]; then
+	echo "file not found"
+    else
+        grep -n $2 $1
+    fi
+}
+
+alias jnbs="jupyter notebook --no-browser --port=8889"
+#export PYTHONPATH=/home/noah/catkin_ws/devel/lib/python2.7/dist-packages:/opt/ros/melodic/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/noah/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/noah/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/noah/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/noah/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+. "$HOME/anaconda3/etc/profile.d/conda.sh"
+if [[ -z ${CONDA_PREFIX+x} ]]; then
+    export PATH="$HOME/anaconda3/bin:$PATH"
+fi
+
+#this line deals with the fairly annoying default behavior that conda exhibits when spawing new shell TODO: create bug report with Conda Repo (3/27/19). 
+# Relevant issue rpt: https://github.com/conda/conda/issues/8211#issuecomment-471710111
+conda deactivate
+
+source /home/noah/gym-gazebo/gym_gazebo/envs/installation/catkin_ws/devel/setup.bash
+alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodelet robot_state_publisher gzclient'
+source /home/noah/gym-gazebo/gym_gazebo/envs/installation/catkin_ws/devel/setup.bash
+export GYM_GAZEBO_WORLD_MAZE=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/maze.world
+export GYM_GAZEBO_WORLD_CIRCUIT=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit.world
+export GYM_GAZEBO_WORLD_CIRCUIT2=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2.world
+export GYM_GAZEBO_WORLD_CIRCUIT2C=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2c.world
+export GYM_GAZEBO_WORLD_ROUND=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/round.world
+
+export EDITOR='/usr/bin/emacs -nw'
