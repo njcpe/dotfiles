@@ -435,10 +435,10 @@ export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/e
 export CUDA_HOME=/usr/local/cuda
 export PATH="$PATH:/usr/local/cuda/bin"
 
-#Powerline Go function
-function _update_ps1() {
-    PS1="$($GOPATH/bin/powerline-go -colorize-hostname -error $? -cwd-max-depth 2 -cwd-max-dir-size 10 -duration -newline -modules "venv,user,ssh,cwd,perms,git,hg,jobs,root")"
-}
+# #Powerline Go function
+# function _update_ps1() {
+#     PS1="$($GOPATH/bin/powerline-go -colorize-hostname -error $? -cwd-max-depth 2 -cwd-max-dir-size 10 -duration -newline -modules "venv,user,ssh,cwd,perms,git,hg,jobs,root")"
+# }
 
 export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/bash-history-$(date "+%Y-%m-%d").log; fi'
 
