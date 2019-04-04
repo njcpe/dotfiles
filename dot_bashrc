@@ -412,6 +412,7 @@ alias g='git'
 alias gs='git status -sb'
 alias gi='git ignore'
 alias ga='git add'
+alias gA='git add -A'
 alias addr='ifconfig | grep "inet addr" -m 1'
 alias gp='cat ~/.github_token | xclip -selection c; git push'
 
@@ -549,13 +550,15 @@ fi
 # Relevant issue rpt: https://github.com/conda/conda/issues/8211#issuecomment-471710111
 conda deactivate
 
-source /home/noah/gym-gazebo/gym_gazebo/envs/installation/catkin_ws/devel/setup.bash
-alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodelet robot_state_publisher gzclient'
-source /home/noah/gym-gazebo/gym_gazebo/envs/installation/catkin_ws/devel/setup.bash
-export GYM_GAZEBO_WORLD_MAZE=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/maze.world
-export GYM_GAZEBO_WORLD_CIRCUIT=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit.world
-export GYM_GAZEBO_WORLD_CIRCUIT2=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2.world
-export GYM_GAZEBO_WORLD_CIRCUIT2C=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2c.world
-export GYM_GAZEBO_WORLD_ROUND=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/round.world
 
-export EDITOR='/usr/bin/emacs -nw'
+alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodelet robot_state_publisher gzclient'
+
+# GYM-GAZEBO specific code. will override default catkin ws if uncommented
+#source /home/noah/gym-gazebo/gym_gazebo/envs/installation/catkin_ws/devel/setup.bash
+#export GYM_GAZEBO_WORLD_MAZE=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/maze.world
+#export GYM_GAZEBO_WORLD_CIRCUIT=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit.world
+#export GYM_GAZEBO_WORLD_CIRCUIT2=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2.world
+#export GYM_GAZEBO_WORLD_CIRCUIT2C=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2c.world
+#export GYM_GAZEBO_WORLD_ROUND=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/round.world
+
+export EDITOR='/usr/bin/emacs-nw'
