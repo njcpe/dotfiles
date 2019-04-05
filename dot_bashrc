@@ -12,6 +12,27 @@ esac
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+
+# Ignore case on auto-completion
+# Note: bind used instead of sticking these in .inputrc
+if [[ $iatest > 0 ]]; then bind "set completion-ignore-case on"; fi
+
+# Show auto-completion list automatically, without double tab
+if [[ $iatest > 0 ]]; then bind "set show-all-if-ambiguous On"; fi
+
+export EDITOR='/usr/bin/emacs-nw'
+export VISUAL='/usr/bin/emacs-nw'
+
+# Color for manpages in less makes manpages a little easier to read
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
 #shopt -s globstar
@@ -76,19 +97,38 @@ fi
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias lt='ls -At1 && echo "------Oldest--"'
-alias ltr='ls -Art1 && echo "------Newest--"'
-alias lS='ls -S'
+# Alias's for multiple directory listing commands
+alias la='ls -Alh' # show hidden files
+alias ls='ls -aFh --color=always' # add colors and file type extensions
+alias lx='ls -lXBh' # sort by extension
+alias lk='ls -lSrh' # sort by size
+alias lc='ls -lcrh' # sort by change time
+alias lu='ls -lurh' # sort by access time
+alias lr='ls -lRh' # recursive ls
+alias lt='ls -ltrh' # sort by date
+alias lm='ls -alh |more' # pipe through 'more'
+alias lw='ls -xAh' # wide listing format
+alias ll='ls -Fls' # long listing format
+alias labc='ls -lap' #alphabetical sort
+alias lf="ls -l | egrep -v '^d'" # files only
+alias ldir="ls -l | egrep '^d'" # directories only
 
+alias bd='cd "$OLDPWD"'
+
+alias sha1='openssl sha1'
+
+
+alias ebrc='chezmoi edit ~/.bashrc'
 
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+testAlert(){
+    sleep 10;
+    alert;
+}
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -562,3 +602,36 @@ alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodelet robo
 #export GYM_GAZEBO_WORLD_ROUND=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/round.world
 
 export EDITOR='/usr/bin/emacs-nw'
+
+#better binary calculator setup
+alias bc='bc -l'
+export BC_ENV_ARGS=~/.bcrc
+
+
+#Chezmoi Aliases
+
+alias cm='chezmoi'
+alias cmd='chezmoi diff | colordiff'
+alias cma='chezmoi apply -v'
+
+export CHEZMOI_PATH=$HOME/.local/share/chezmoi
+
+#Chezmoi Aware Edit sh function because I keep forgetting to edit the chezmoi files using "chezmoi edit" instead of just editing the local copies.
+cedit(){
+    if [ -z "$1" ]; then
+        echo "No argument supplied"
+    else
+        FILENAME="$1"
+        CHEZMOI_FILE="$CHEZMOI_PATH/dot_${FILENAME#.}"
+        echo "$CHEZMOI_FILE"
+
+        if [ -e "$CHEZMOI_FILE" ]; then
+            echo "$CHEZMOI_FILE exists, editing managed file"
+            chezmoi edit $1;
+        else
+            $EDITOR $1;
+        fi
+    fi
+}
+
+alias edit=cedit
