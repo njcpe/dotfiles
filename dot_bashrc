@@ -207,15 +207,10 @@ alias biggest='BLOCKSIZE=1048576; du -x | sort -nr | head -10'
 # Android Dev aliases
 alias adb='sudo adb'
 alias adbr='adb kill-server; adb start-server'
-alias studio='/usr/local/bin/studio . & '
+alias studio='/usr/local/bin/studio'
 
 #BoxSync
 alias box='~/repos/box-linux-sync/bin/box-sync'
-
-#Forbidden Aliases
-alias discline='~/repos/Discline/Discline.py'
-
-
 
 #Spark
 #alias clear='clear; echo; echo; seq 1 $(tput cols) | sort -R | spark; echo; echo'          # Non coloured
@@ -233,7 +228,7 @@ alias xopen='xdg-open'
 
 #git extra-extras
 alias g='git'
-alias gch='git checkout'
+alias gch=' git checkout'
 alias gco='git commit'
 alias gcl='git clone'
 alias gd='git diff'
@@ -261,7 +256,7 @@ export tfgputools=$HOME/tensorflow_builds/tf_gpu/tensorflow/bazel-bin/tensorflow
 
 #CUDNN
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64"
-export CUDA_HOME=/usr/local/cuda
+export CUDA_HOME="/usr/local/cuda/"
 export PATH="$PATH:/usr/local/cuda/bin"
 
 #Powerline Go function
@@ -428,8 +423,7 @@ alias studio='/usr/local/bin/studio . & '
 #BoxSync
 alias box='~/repos/box-linux-sync/bin/box-sync'
 
-#Forbidden Aliases
-alias discline='~/repos/Discline/Discline.py'
+
 
 
 
@@ -601,7 +595,6 @@ alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodelet robo
 #export GYM_GAZEBO_WORLD_CIRCUIT2C=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2c.world
 #export GYM_GAZEBO_WORLD_ROUND=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/round.world
 
-export EDITOR='/usr/bin/emacs-nw'
 
 #better binary calculator setup
 alias bc='bc -l'
@@ -621,17 +614,32 @@ cedit(){
     if [ -z "$1" ]; then
         echo "No argument supplied"
     else
-        FILENAME="$1"
+        FILENAME="$(basename $1)"
+        CM_FILENAME="dot_${FILENAME#.}"
         CHEZMOI_FILE="$CHEZMOI_PATH/dot_${FILENAME#.}"
-        echo "$CHEZMOI_FILE"
 
-        if [ -e "$CHEZMOI_FILE" ]; then
-            echo "$CHEZMOI_FILE exists, editing managed file"
-            chezmoi edit $1;
-        else
-            $EDITOR $1;
+        if [ -e "$CHEZMOI_FILE" ]; then #if Chezmoi manages the single file, the syntax is dot_filename, and we should look for that first
+            echo "$CHEZMOI_FILE exists, editing managed file" 
+            chezmoi edit $(realpath $1);
+        else 
+            list="$(find $CHEZMOI_PATH -name $FILENAME)" #but if Chezmoi is managing a directory, only the top level managed directory has a different name, so we (lazily) search for the target filename in the managed files, as any one file is only managed once, so the path should be unique (maybe)
+            list2="$(find $CHEZMOI_PATH -name $(basename $CHEZMOI_FILE))" #(Turns out it isnt so we gotta catch the case where it is in a managed folder that starts with a dot)
+            if [ -e "$list" ]; then
+                echo "$list exists, editing managed file"
+                chezmoi edit $(realpath $1);
+            elif [ -e "$list2" ]; then
+                echo "$list2 exists, editing managed file"
+                chezmoi edit $(realpath $1);
+            else
+                $EDITOR $1;
+            fi
         fi
     fi
 }
 
-alias edit=cedit
+alias e=cedit
+
+export ALTERNATE_EDITOR= #emacs will automatically start daemon if this is set but empty, but will fail if it is unset.
+
+
+#emacs --daemon
