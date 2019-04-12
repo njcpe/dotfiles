@@ -2,6 +2,12 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+#start tmux session
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+    tmux attach || exec tmux new-session && exit;
+fi
+
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -437,7 +443,7 @@ alias tfclone='conda create --clone tf_build --name'
 
 #Other
 alias rst='exec bash'
-alias emacs='emacs -nw'
+alias emacs='emacsclient -nw'
 alias zen='python -c "import this"'
 alias xopen='xdg-open'
 
