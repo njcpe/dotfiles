@@ -315,11 +315,10 @@ set -g status-position bottom
    tmux-plugins/tmux-cpu        \
    egel/tmux-gruvbox            \
  '
-set -g @sidebar-tree-command 'ranger'
-set -g @sidebar-tree-width '20'
-set -g @sidebar-tree-position 'right'
-    
-#set -g @sidebar-key-tab 'ranger,left,50,focus'
+#set -g @sidebar-tree-command 'ranger'
+#set -g @sidebar-tree-width '20'
+#set -g @sidebar-tree-position 'right'
+set -g @sidebar-key-tab 'ranger,left,50,focus'
 
 
 
