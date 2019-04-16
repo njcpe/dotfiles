@@ -316,6 +316,17 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   )
 
+
+
+;; The following lines are always needed. Choose your own keys.
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-switchb)
+
+(defun my-open-file (file) (lambda () (interactive) (find-file file)))
+(bind-key "C-c t" (my-open-file ".notes"))
+
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
 (custom-set-variables
@@ -332,3 +343,4 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
