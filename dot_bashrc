@@ -10,7 +10,7 @@ if [[ $iatest > 0 ]]; then bind "set bell-style visible"; fi
 
 #start tmux session
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-    tmux attach || exec tmux new-session && exit;
+    tmux attach || tmux new-session ;
 fi
 
 
@@ -32,8 +32,22 @@ if [[ $iatest > 0 ]]; then bind "set completion-ignore-case on"; fi
 # Show auto-completion list automatically, without double tab
 if [[ $iatest > 0 ]]; then bind "set show-all-if-ambiguous On"; fi
 
+
+#Editor Env Variables
+
+#emacs will automatically start daemon if ALT_EDITOR is set but empty, but will fail if it is unset.
+export ALTERNATE_EDITOR=""
+
+#Editor is for Terminal
 export EDITOR='/usr/bin/emacs-nw'
+#Visual o/w
 export VISUAL='/usr/bin/emacs-nw'
+
+#Emacs Aliases
+alias emax='emacsclient -t'
+alias semac='sudo emacsclient -t'
+alias emacsc="emacsclient -c -a emacs"           # new - opens the GUI with alternate non-daemon
+alias ke="emacsclient -e '(save-buffers-kill-emacs)'" #kill emacs from bash
 
 # Color for manpages in less makes manpages a little easier to read
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -176,7 +190,7 @@ export PATH="/usr/local/MATLAB/R2017a/bin:$PATH"
 #alias matlab="matlab &"
 alias matlab="matlab -nodesktop"
 
-# Useful (Stolen) aliases
+# Useful aliases
 alias ports='netstat -tulanp'
 alias h='history'
 alias j='jobs -l'
@@ -234,7 +248,7 @@ alias tfclone='conda create --clone tf_build --name'
 
 #Other
 alias rst='exec bash'
-alias emacs='emacs -nw'
+
 alias zen='python -c "import this"'
 alias xopen='xdg-open'
 
@@ -351,7 +365,7 @@ extract () {
 alias matlabnd="matlab -nodesktop"
 alias studio='/usr/local/bin/studio . & '
 
-alias emacs='emacsclient -nw'
+
 
 alias gA='git add -A'
 alias gp='cat ~/.github_token | xclip -selection c; git push'
@@ -445,16 +459,21 @@ cedit(){
     if [ -z "$1" ]; then
         echo "No argument supplied"
     else
+        #get all important names
         FILENAME="$(basename $1)"
         CM_FILENAME="dot_${FILENAME#.}"
         CHEZMOI_FILE="$CHEZMOI_PATH/dot_${FILENAME#.}"
 
-        if [ -e "$CHEZMOI_FILE" ]; then #if Chezmoi manages the single file, the syntax is dot_filename, and we should look for that first
+        #if Chezmoi manages the single file, the syntax is dot_filename, and we should look for that first
+        if [ -e "$CHEZMOI_FILE" ]; then 
             echo "$CHEZMOI_FILE exists, editing managed file" 
             chezmoi edit $(realpath $1);
-        else 
-            list="$(find $CHEZMOI_PATH -name $FILENAME)" #but if Chezmoi is managing a directory, only the top level managed directory has a different name, so we (lazily) search for the target filename in the managed files, as any one file is only managed once, so the path should be unique (maybe)
-            list2="$(find $CHEZMOI_PATH -name $(basename $CHEZMOI_FILE))" #(Turns out it isnt so we gotta catch the case where it is in a managed folder that starts with a dot)
+        else
+            #but if Chezmoi is managing a directory, only the top level managed directory has a different name,
+            #so we (lazily) search for the target filename in the managed files, as any one file is only managed once, so the path should be unique (maybe)
+            list="$(find $CHEZMOI_PATH -name $FILENAME)"
+            #(Turns out it isnt so we gotta catch the case where it is in a managed folder that starts with a dot)
+            list2="$(find $CHEZMOI_PATH -name $(basename $CHEZMOI_FILE))"
             if [ -e "$list" ]; then
                 echo "$list exists, editing managed file"
                 chezmoi edit $(realpath $1);
@@ -470,5 +489,4 @@ cedit(){
 
 alias e=cedit
 
-export ALTERNATE_EDITOR="" #emacs will automatically start daemon if this is set but empty, but will fail if it is unset.
-
+source $HOME/scripts/gh_complete.sh
