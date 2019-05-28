@@ -290,20 +290,15 @@ function _update_ps1() {
     PS1="$($GOPATH/bin/powerline-go -colorize-hostname -error $? -cwd-max-depth 2 -cwd-max-dir-size 10 -duration -newline -modules "venv,cwd,perms,git,hg,jobs,root")"
 }
 
-export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/bash-history-$(date "+%Y-%m-%d").log; fi'
+# Used for comprehensive logging
+#export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/bash-history-$(date "+%Y-%m-%d").log; fi'
 
 
 if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
     export PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 fi
 
-HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-HISTSIZE=1000
-HISTFILESIZE=2000
+shopt -s cmdhist
 
 # Don't complete a Tab press on an empty line with every possible command
 shopt -s no_empty_cmd_completion
@@ -372,11 +367,6 @@ alias gp='cat ~/.github_token | xclip -selection c; git push'
 
 export CUDA_HOME=/usr/local/cuda
 
-# #Powerline Go function
-# function _update_ps1() {
-#     PS1="$($GOPATH/bin/powerline-go -colorize-hostname -error $? -cwd-max-depth 2 -cwd-max-dir-size 10 -duration -newline -modules "venv,user,ssh,cwd,perms,git,hg,jobs,root")"
-# }
-
 # Runs a ls immediately when you're inside a file. 
 cl() {
  if [ -d $1 ] ; then
@@ -392,15 +382,30 @@ source ~/catkin_ws/devel/setup.bash
 export LD_LIBRARY_PATH=/usr/local/lib:/home/noah/catkin_ws/devel/lib:/opt/ros/melodic/lib:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
 source /usr/share/gazebo/setup.sh
 
+
 search() {
     if [ -z "$1" ]; then
 	      echo "No argument supplied"
     elif [ ! -f $1 ]; then
 	      echo "file not found"
     else
-        grep -n $2 $1
+        ack -n $2 $1
     fi
 }
+
+#search bash logs
+export LOGPATH=$HOME/.logs
+
+hsearch() {
+    if [ -z "$1" ]; then
+	      echo "No argument supplied"
+    elif [ ! -d $LOGPATH ]; then
+	      echo "$LOGPATH does not exist. Check that this path is correct."
+    else
+        awk '{$2 = ""; $3 = ""; print $0;}' $LOGPATH/* | ack $1 --color | less -r
+    fi
+}
+
 
 alias jnbs="jupyter notebook --no-browser --port=8889"
 #export PYTHONPATH=/home/noah/catkin_ws/devel/lib/python2.7/dist-packages:/opt/ros/melodic/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages
@@ -490,3 +495,13 @@ cedit(){
 alias e=cedit
 
 source $HOME/scripts/gh_complete.sh
+
+#Task Warrior server
+
+export TASKDDATA=/var/taskd
+
+if [ ! -d "$TASKDDATA" ]; then
+    mkdir -p $TASKDDATA;
+fi
+
+source $HOME/.hstr_conf
