@@ -1,0 +1,278 @@
+# If you come from bash you might have to change your $PATH.
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+DEFAULT_USER=$(whoami)
+# Path to your oh-my-zsh installation.
+export ZSH="/home/noah/.oh-my-zsh"
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="powerlevel10k/powerlevel10k"
+POWERLEVEL9K_MODE="awesome-patched"
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs anaconda time)
+POWERLEVEL9K_ANACONDA_LEFT_DELIMITER=""
+POWERLEVEL9K_ANACONDA_RIGHT_DELIMITER=""
+COMPLETION_WAITING_DOTS="true"
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+plugins=(\
+  git \
+  sudo \
+  zsh-autosuggestions \
+  zsh-syntax-highlighting \
+  vi-mode \
+)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#93a1a1"
+export HISTFILE="$HOME/.zsh_history"
+export HISTSIZE=100000
+export SAVEHIST=100000
+setopt BANG_HIST                 # Treat the '!' character specially during expansion.
+setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
+setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
+setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+source $ZSH/oh-my-zsh.sh
+# User configuration
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+iatest=$(expr index "$-" i)
+# If not running interactively, don't do anything
+case $- in
+  *i*) ;;
+  *) return;;
+esac
+#Editor Env Variables
+#Editor is for Terminal
+export EDITOR='/usr/bin/nvim'
+#Visual o/w
+export VISUAL='/usr/bin/nvim'
+# Color for manpages in less makes manpages a little easier to read
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+  debian_chroot=$(cat /etc/debian_chroot)
+fi
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+  xterm-color|*-256color) color_prompt=yes;;
+esac
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+if [ -n "$force_color_prompt" ]; then
+  if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    # We have color support; assume it's compliant with Ecma-48
+    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    # a case would tend to support setf rather than setaf.)
+    color_prompt=yes
+  else
+    color_prompt=
+  fi
+fi
+unset color_prompt force_color_prompt
+if [ -x /usr/bin/dircolors ]; then
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+fi
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+testAlert(){
+  sleep 10;
+  alert;
+}
+# Alias definitions.
+if [ -f ~/.bash_aliases ]; then
+  . ~/.bash_aliases
+fi
+# symlinks.
+export PATH="/home/noah/.symlinks:$PATH"
+export JAVA_HOME
+PATH=$PATH:$JAVA_HOME
+export PATH
+#Matlab Path append
+export PATH="/usr/local/MATLAB/R2019a/bin:$PATH"
+dirsize() {
+  du -hs $* | sort -h
+}
+#go-lang
+export GOPATH=$HOME/gocode
+export PATH=$PATH:$(go env GOPATH)/bin
+export GOPATH=$(go env GOPATH)
+export JAVA_HOME="/usr/lib/jvm/java-8-oracle/"
+#Tensorflow
+export tfcputools=$HOME/tensorflow_builds/tf_cpu/tensorflow/bazel-bin/tensorflow/tools
+export tfgputools=$HOME/tensorflow_builds/tf_gpu/tensorflow/bazel-bin/tensorflow/tools
+#export PATH=$PATH:$TF_TOOLS/benchmark:$TF_TOOLS/graph_transforms
+#CUDNN
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64"
+export CUDA_HOME="/usr/local/cuda/"
+export PATH="$PATH:/usr/local/cuda/bin"
+# Used for comprehensive logging
+export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/zsh-history-$(date "+%Y-%m-%d").log; fi'
+setopt auto_cd
+# Update LINES and COLUMNS after each command if necessary
+# Include filenames with leading dots in pattern matching
+setopt dotglob
+# Load history expansion result as the next command, don't run them directly
+setopt histverify
+# some usefull functions
+extract () {
+
+  filename=$(basename -- $1)
+  filename="${filename%.*}"
+
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xvjf $1    ;;
+      *.tar.gz)    tar xvzf $1    ;;
+      *.bz2)       bunzip2 $1     ;;
+      *.rar)       rar x $1       ;;
+      *.gz)        gunzip $1      ;;
+      *.tar)       tar xvf $1     ;;
+      *.tbz2)      tar xvjf $1    ;;
+      *.tgz)       tar xvzf $1    ;;
+      *.zip)       unzip $1       ;;
+      *.Z)         uncompress $1  ;;
+      *.7z)        7z x $1        ;;
+      *)           echo "don't know how to extract '$1'..." ;;
+    esac
+  else
+    echo "'$1' is not a valid file!"
+  fi
+}
+echoerr() { echo "$@" 1>&2; }
+export CUDA_HOME=/usr/local/cuda
+# Runs a ls immediately when you're inside a file.
+cl() {
+  if [ -d $1 ] ; then
+    cd $1
+    ls
+  else
+    echo "'$1' not a dir..."
+  fi
+}
+if [ ! -z "$LOAD_ROS_ENV" ] ; then
+  source /opt/ros/melodic/setup.bash
+  source ~/catkin_ws/devel/setup.bash
+  export LD_LIBRARY_PATH=/usr/local/lib:/home/noah/catkin_ws/devel/lib:/opt/ros/melodic/lib:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
+  source /usr/share/gazebo/setup.sh
+fi
+search() {
+  if [ -z "$1" ]; then
+    echo "No argument supplied"
+  elif [ ! -f $1 ]; then
+    echo "file not found"
+  else
+    ack -n $2 $1
+  fi
+}
+#search bash logs
+export LOGPATH=$HOME/.logs
+hsearch() {
+  if [ -z "$1" ]; then
+    echo "No argument supplied"
+  elif [ ! -d $LOGPATH ]; then
+    echo "$LOGPATH does not exist. Check that this path is correct."
+  else
+    awk '{$2 = ""; $3 = ""; print $0;}' $LOGPATH/* | ack $1 --color | less -r
+  fi
+}
+# >> conda initialize>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/noah/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+  eval "$__conda_setup"
+else
+  if [ -f "/home/noah/anaconda3/etc/profile.d/conda.sh" ]; then
+    . "/home/noah/anaconda3/etc/profile.d/conda.sh"
+  else
+    export PATH="/home/noah/anaconda3/bin:$PATH"
+  fi
+fi
+unset __conda_setup
+# <<  conda initialize<<
+. "$HOME/anaconda3/etc/profile.d/conda.sh"
+if [[ -z ${CONDA_PREFIX+x} ]]; then
+  export PATH="$HOME/anaconda3/bin:$PATH"
+fi
+#this line deals with the fairly annoying default behavior that conda exhibits when spawing new shell TODO: create bug report with Conda Repo (3/27/19).
+# Relevant issue rpt: https://github.com/conda/conda/issues/8211#issuecomment-471710111
+conda deactivate
+# GYM-GAZEBO specific code. will override default catkin ws if uncommented
+#source /home/noah/gym-gazebo/gym_gazebo/envs/installation/catkin_ws/devel/setup.bash
+#export GYM_GAZEBO_WORLD_MAZE=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/maze.world
+#export GYM_GAZEBO_WORLD_CIRCUIT=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit.world
+#export GYM_GAZEBO_WORLD_CIRCUIT2=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2.world
+#export GYM_GAZEBO_WORLD_CIRCUIT2C=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2c.world
+#export GYM_GAZEBO_WORLD_ROUND=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/round.world
+#better binary calculator setup
+export BC_ENV_ARGS=~/.bcrc
+#Chezmoi Aliases
+export CHEZMOI_PATH=$HOME/.local/share/chezmoi
+#Chezmoi Aware Edit sh function because I keep forgetting to edit the chezmoi files using "chezmoi edit" instead of just editing the local copies.
+cedit(){
+  if [ -z "$1" ]; then
+    echo "No argument supplied"
+  else
+    #get all important names
+    FILENAME="$(basename $1)"
+    CM_FILENAME="dot_${FILENAME#.}"
+    CHEZMOI_FILE="$CHEZMOI_PATH/dot_${FILENAME#.}"
+    #if Chezmoi manages the single file, the syntax is dot_filename, and we should look for that first
+    if [ -e "$CHEZMOI_FILE" ]; then
+      echo "$CHEZMOI_FILE exists, editing managed file"
+      chezmoi edit $(realpath $1);
+    else
+      #but if Chezmoi is managing a directory, only the top level managed directory has a different name,
+      #so we (lazily) search for the target filename in the managed files, as any one file is only managed once, so the path should be unique (maybe)
+      list="$(find $CHEZMOI_PATH -name $FILENAME)"
+      #(Turns out it isnt so we gotta catch the case where it is in a managed folder that starts with a dot)
+      list2="$(find $CHEZMOI_PATH -name $(basename $CHEZMOI_FILE))"
+      if [ -e "$list" ]; then
+        echo "$list exists, editing managed file"
+        chezmoi edit $(realpath $1);
+      elif [ -e "$list2" ]; then
+        echo "$list2 exists, editing managed file"
+        chezmoi edit $(realpath $1);
+      else
+        $EDITOR $1;
+      fi
+    fi
+  fi
+}
+#Task Warrior server
+export TASKDDATA=/var/taskd
+if [ ! -d "$TASKDDATA" ]; then
+  mkdir -p $TASKDDATA;
+fi
+# source $HOME/.bashrc.task
+source $HOME/.zhstrconf
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+#POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+POWERLEVEL9K_COLOR_SCHEME='light'
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# Make sure we can access scripts directory
+export PATH="$HOME/scripts:$PATH"

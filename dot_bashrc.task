@@ -19,7 +19,7 @@ alias tw2m="task modify wait:2m"
 alias tw3m="task modify wait:3m"
 
 # context control
-alias tc="task context"
+alias tac="task context"
 alias tt="task rc.context=none"
 alias ttv="vit rc.alias.next=list rc.context=none"
 alias twork="task rc.context=work"

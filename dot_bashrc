@@ -9,9 +9,9 @@ if [[ $iatest > 0 ]]; then bind "set bell-style visible"; fi
 
 
 #start tmux session
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-    tmux attach || tmux new-session ;
-fi
+#if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+#    tmux attach || tmux new-session ;
+#fi
 
 
 # If not running interactively, don't do anything
@@ -34,20 +34,12 @@ if [[ $iatest > 0 ]]; then bind "set show-all-if-ambiguous On"; fi
 
 
 #Editor Env Variables
-
-#emacs will automatically start daemon if ALT_EDITOR is set but empty, but will fail if it is unset.
-export ALTERNATE_EDITOR=""
-
+alias vim='nvim'
+alias v='nvim'
 #Editor is for Terminal
-export EDITOR='/usr/bin/emacs-nw'
+export EDITOR='/usr/bin/nvim'
 #Visual o/w
-export VISUAL='/usr/bin/emacs-nw'
-
-#Emacs Aliases
-alias emax='emacsclient -t'
-alias semac='sudo emacsclient -t'
-alias emacsc="emacsclient -c -a emacs"           # new - opens the GUI with alternate non-daemon
-alias ke="emacsclient -e '(save-buffers-kill-emacs)'" #kill emacs from bash
+export VISUAL='/usr/bin/nvim'
 
 # Color for manpages in less makes manpages a little easier to read
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -185,7 +177,7 @@ PATH=$PATH:$JAVA_HOME
 export PATH
 
 #Matlab Path append
-export PATH="/usr/local/MATLAB/R2017a/bin:$PATH"
+export PATH="/usr/local/MATLAB/R2019a/bin:$PATH"
 
 #alias matlab="matlab &"
 alias matlab="matlab -nodesktop"
@@ -287,11 +279,12 @@ export PATH="$PATH:/usr/local/cuda/bin"
 
 #Powerline Go function
 function _update_ps1() {
-    PS1="$($GOPATH/bin/powerline-go -colorize-hostname -error $? -cwd-max-depth 2 -cwd-max-dir-size 10 -duration -newline -modules "venv,cwd,perms,git,hg,jobs,root")"
+#    PS1="$($GOPATH/bin/powerline-go -colorize-hostname -error $? -cwd-max-depth 2 -cwd-max-dir-size 10 -duration -newline -modules "venv,cwd,perms,git,hg,jobs,root")"
+    PS1="$($GOPATH/bin/powerline-go -colorize-hostname -error $? -modules "venv,git,cwd" -path-aliases \~=λ,\~/repos=@gh)"
 }
 
 # Used for comprehensive logging
-#export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/bash-history-$(date "+%Y-%m-%d").log; fi'
+export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/bash-history-$(date "+%Y-%m-%d").log; fi'
 
 
 if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
@@ -357,13 +350,13 @@ extract () {
   fi
 }
 
-alias matlabnd="matlab -nodesktop"
 alias studio='/usr/local/bin/studio . & '
 
 
 
 alias gA='git add -A'
 alias gp='cat ~/.github_token | xclip -selection c; git push'
+echoerr() { echo "$@" 1>&2; }
 
 export CUDA_HOME=/usr/local/cuda
 
@@ -377,11 +370,14 @@ cl() {
  fi
 }
 
-source /opt/ros/melodic/setup.bash
-source ~/catkin_ws/devel/setup.bash
-export LD_LIBRARY_PATH=/usr/local/lib:/home/noah/catkin_ws/devel/lib:/opt/ros/melodic/lib:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
-source /usr/share/gazebo/setup.sh
-
+if [ ! -z "$LOAD_ROS_ENV" ] ; then
+  source /opt/ros/melodic/setup.bash
+  source ~/catkin_ws/devel/setup.bash
+  export LD_LIBRARY_PATH=/usr/local/lib:/home/noah/catkin_ws/devel/lib:/opt/ros/melodic/lib:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
+  source /usr/share/gazebo/setup.sh
+else
+  echoerr "LOAD_ROS_ENV var empty, skipping ros load"
+fi
 
 search() {
     if [ -z "$1" ]; then
@@ -503,5 +499,7 @@ export TASKDDATA=/var/taskd
 if [ ! -d "$TASKDDATA" ]; then
     mkdir -p $TASKDDATA;
 fi
+
+source $HOME/.bashrc.task
 
 source $HOME/.hstr_conf

@@ -13,10 +13,10 @@
 	status = auto
 	grep = auto
 [core]
-	editor = emacs
-	editor = emacs
+	editor = nvim
+	editor = nvim
 [credential]
-	helper = store
+  helper = store
 [alias]
     lg = !"git lg1"
     lg1 = !"git lg1-specific --all"
