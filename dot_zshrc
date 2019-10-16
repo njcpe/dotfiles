@@ -1,3 +1,4 @@
+#!/bin/env zsh
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 DEFAULT_USER=$(whoami)
@@ -197,38 +198,40 @@ hsearch() {
     awk '{$2 = ""; $3 = ""; print $0;}' $LOGPATH/* | ack $1 --color | less -r
   fi
 }
-# >> conda initialize>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/noah/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-  eval "$__conda_setup"
+if [[ $(which conda) = *"not found"* ]]; then
+  echo "conda not found"
 else
-  if [ -f "/home/noah/anaconda3/etc/profile.d/conda.sh" ]; then
-    . "/home/noah/anaconda3/etc/profile.d/conda.sh"
+  # >> conda initialize>>
+  # # !! Contents within this block are managed by 'conda init' !!
+  __conda_setup="$('$HOME/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
   else
-    export PATH="/home/noah/anaconda3/bin:$PATH"
+    if [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
+      . "$HOME/anaconda3/etc/profile.d/conda.sh"
+    else
+      export PATH="$HOME/anaconda3/bin:$PATH"
+    fi
   fi
+  unset __conda_setup
+  # <<  conda initialize<<
+  if [[ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]]; then
+    . "$HOME/anaconda3/etc/profile.d/conda.sh"
+    if [[ -z ${CONDA_PREFIX+x} ]]; then
+      export PATH="$HOME/anaconda3/bin:$PATH"
+    fi
+  fi
+
+  #this line deals with the fairly annoying default behavior that conda exhibits when spawing new shell TODO: create bug report with Conda Repo (3/27/19).
+  # Relevant issue rpt: https://github.com/conda/conda/issues/8211#issuecomment-471710111
+  conda deactivate
 fi
-unset __conda_setup
-# <<  conda initialize<<
-. "$HOME/anaconda3/etc/profile.d/conda.sh"
-if [[ -z ${CONDA_PREFIX+x} ]]; then
-  export PATH="$HOME/anaconda3/bin:$PATH"
-fi
-#this line deals with the fairly annoying default behavior that conda exhibits when spawing new shell TODO: create bug report with Conda Repo (3/27/19).
-# Relevant issue rpt: https://github.com/conda/conda/issues/8211#issuecomment-471710111
-conda deactivate
-# GYM-GAZEBO specific code. will override default catkin ws if uncommented
-#source /home/noah/gym-gazebo/gym_gazebo/envs/installation/catkin_ws/devel/setup.bash
-#export GYM_GAZEBO_WORLD_MAZE=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/maze.world
-#export GYM_GAZEBO_WORLD_CIRCUIT=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit.world
-#export GYM_GAZEBO_WORLD_CIRCUIT2=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2.world
-#export GYM_GAZEBO_WORLD_CIRCUIT2C=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/circuit2c.world
-#export GYM_GAZEBO_WORLD_ROUND=/home/noah/gym-gazebo/gym_gazebo/envs/installation/../assets/worlds/round.world
+
 #better binary calculator setup
 export BC_ENV_ARGS=~/.bcrc
 #Chezmoi Aliases
 export CHEZMOI_PATH=$HOME/.local/share/chezmoi
+
 #Chezmoi Aware Edit sh function because I keep forgetting to edit the chezmoi files using "chezmoi edit" instead of just editing the local copies.
 cedit(){
   if [ -z "$1" ]; then
@@ -237,34 +240,26 @@ cedit(){
     #get all important names
     FILENAME="$(basename $1)"
     CM_FILENAME="dot_${FILENAME#.}"
-    CHEZMOI_FILE="$CHEZMOI_PATH/dot_${FILENAME#.}"
-    #if Chezmoi manages the single file, the syntax is dot_filename, and we should look for that first
-    if [ -e "$CHEZMOI_FILE" ]; then
-      echo "$CHEZMOI_FILE exists, editing managed file"
+    if [[ $(chezmoi source-path "$FILENAME") = *"$CM_FILENAME"* ]]; then 
+      echo "editing managed file"
       chezmoi edit $(realpath $1);
     else
-      #but if Chezmoi is managing a directory, only the top level managed directory has a different name,
-      #so we (lazily) search for the target filename in the managed files, as any one file is only managed once, so the path should be unique (maybe)
-      list="$(find $CHEZMOI_PATH -name $FILENAME)"
-      #(Turns out it isnt so we gotta catch the case where it is in a managed folder that starts with a dot)
-      list2="$(find $CHEZMOI_PATH -name $(basename $CHEZMOI_FILE))"
-      if [ -e "$list" ]; then
-        echo "$list exists, editing managed file"
-        chezmoi edit $(realpath $1);
-      elif [ -e "$list2" ]; then
-        echo "$list2 exists, editing managed file"
-        chezmoi edit $(realpath $1);
-      else
-        $EDITOR $1;
-      fi
+      echo "file not in a source state" 
+      $EDITOR $1
     fi
   fi
 }
-#Task Warrior server
-export TASKDDATA=/var/taskd
-if [ ! -d "$TASKDDATA" ]; then
-  mkdir -p $TASKDDATA;
+
+hostname=$(hostname -d)
+if [ "$hostname" = "noahserver.ele.uri.edu" ]; then
+
+  #Task Warrior server
+  export TASKDDATA=/var/taskd
+  if [ ! -d "$TASKDDATA" ]; then
+    mkdir -p $TASKDDATA;
+  fi
 fi
+
 # source $HOME/.bashrc.task
 source $HOME/.zhstrconf
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
