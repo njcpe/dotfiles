@@ -93,7 +93,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 unset color_prompt force_color_prompt
 if [ -x /usr/bin/dircolors ]; then
-  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  test -r $HOME/.dircolors && eval "$(dircolors -b $HOME/.dircolors)" || eval "$(dircolors -b)"
 fi
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
@@ -103,7 +103,7 @@ testAlert(){
 }
 
 # Alias definitions.
-[[ -f ~/.config/aliasrc ]] && source ~/.config/aliasrc
+[[ -f $HOME/.config/aliasrc ]] && source $HOME/.config/aliasrc
 
 # symlinks.
 if [ -d "$HOME/.config/symlinks" ]; then
@@ -121,31 +121,69 @@ dirsize() {
   du -hs $* | sort -h
 }
 
+ask() {
+    # https://gist.github.com/davejamesmiller/1965569
+    local prompt default reply
+
+    if [ "${2:-}" = "Y" ]; then
+        prompt="Y/n"
+        default=Y
+    elif [ "${2:-}" = "N" ]; then
+        prompt="y/N"
+        default=N
+    else
+        prompt="y/n"
+        default=
+    fi
+
+    while true; do
+
+        # Ask the question (not using "read -p" as it uses stderr not stdout)
+        echo -n "$1 [$prompt] "
+
+        # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
+        read reply </dev/tty
+
+        # Default?
+        if [ -z "$reply" ]; then
+            reply=$default
+        fi
+
+        # Check if the reply is valid
+        case "$reply" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+
+    done
+}
+
+source getPkgMan
+
 #go-lang
-if [[ $(which go) == "*not found*" ]]; then
+if [[ $(which go) = *"not found"* ]]; then
+  if ask "Go not installed, install now?" Y; then
+    pkgInstall golang
+  fi
 else
   export GOPATH=$HOME/gocode
   export PATH=$PATH:$(go env GOPATH)/bin
   export GOPATH=$(go env GOPATH)
 fi
 
-export JAVA_HOME="/usr/lib/jvm/java-8-oracle/"
+[[ -d "/usr/lib/jvm/" ]] && export JAVA_HOME="/usr/lib/jvm/java-8-oracle/"
 
-#Tensorflow
+#Tensorflow Source Builds
 
-if [ -d "$HOME/tensorflow_builds" ]; then
-  export tfcputools=$HOME/tensorflow_builds/tf_cpu/tensorflow/bazel-bin/tensorflow/tools
-  export tfgputools=$HOME/tensorflow_builds/tf_gpu/tensorflow/bazel-bin/tensorflow/tools
-fi
+[[ -d "$HOME/tensorflow_builds" ]] && export tfcputools=$HOME/tensorflow_builds/tf_cpu/tensorflow/bazel-bin/tensorflow/tools && export tfgputools=$HOME/tensorflow_builds/tf_gpu/tensorflow/bazel-bin/tensorflow/tools
 
-#export PATH=$PATH:$TF_TOOLS/benchmark:$TF_TOOLS/graph_transforms
 #CUDNN
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64"
 export CUDA_HOME="/usr/local/cuda/"
 export PATH="$PATH:/usr/local/cuda/bin"
 
 # Used for comprehensive logging
-export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/zsh-history-$(date "+%Y-%m-%d").log; fi'
+export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> $HOME/.logs/zsh-history-$(date "+%Y-%m-%d").log; fi'
 setopt auto_cd
 
 # Update LINES and COLUMNS after each command if necessary
@@ -211,7 +249,10 @@ search() {
   fi
 }
 
-#search bash logs
+#comprehensive logs
+if [ ! -d "$HOME/.logs" ]; then
+  mkdir $HOME/.logs
+fi
 export LOGPATH=$HOME/.logs
 
 hsearch() {
@@ -254,7 +295,7 @@ else
 fi
 
 #better binary calculator setup
-export BC_ENV_ARGS=~/.bcrc
+[[ -f $HOME/.config/bcrc ]] && export BC_ENV_ARGS=$HOME/.config/bcrc
 #Chezmoi Aliases
 export CHEZMOI_PATH=$HOME/.local/share/chezmoi
 
@@ -280,19 +321,17 @@ hostname=$(hostname -d)
 if [ "$hostname" = "noahserver.ele.uri.edu" ]; then
   #Task Warrior server
   export TASKDDATA=/var/taskd
-  if [ ! -d "$TASKDDATA" ]; then
-    mkdir -p $TASKDDATA;
-  fi
+  [ ! -d "$TASKDDATA" ] && mkdir -p $TASKDDATA;
 fi
 
 # source $HOME/.bashrc.task
-[[ -f ~/.config/zhstrconf ]] && source $HOME/.config/zhstrconf
+[[ -f $HOME/.config/zhstrconf ]] && source $HOME/.config/zhstrconf
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ -f ~/.config/p10k.zsh ]] && source ~/.config/p10k.zsh
+[[ -f $HOME/.config/p10k.zsh ]] && source $HOME/.config/p10k.zsh
 #POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 POWERLEVEL9K_COLOR_SCHEME='light'
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # Make sure we can access scripts directory
-export PATH="$HOME/.config/scripts:$PATH"
+[[ -d $HOME/.config/scripts ]] && export PATH="$HOME/.config/scripts:$PATH" || echo "scripts directory missing, functionality will be greatly reduced"
