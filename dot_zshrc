@@ -97,13 +97,17 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-testAlert(){
-  sleep 10;
-  alert;
-}
 
 # Alias definitions.
 [[ -f $HOME/.config/aliasrc ]] && source $HOME/.config/aliasrc
+
+# Make sure we can access scripts directory
+if [[ -d $HOME/.config/scripts ]]; then
+  export PATH="$HOME/.config/scripts:$PATH"
+  source .config/scripts/generalFunctions
+else
+  echo "scripts directory missing, functionality will be greatly reduced"
+fi
 
 # symlinks.
 if [ -d "$HOME/.config/symlinks" ]; then
@@ -117,46 +121,6 @@ export PATH
 
 export PATH="/usr/local/MATLAB/R2019a/bin:$PATH"
 
-dirsize() {
-  du -hs $* | sort -h
-}
-
-ask() {
-    # https://gist.github.com/davejamesmiller/1965569
-    local prompt default reply
-
-    if [ "${2:-}" = "Y" ]; then
-        prompt="Y/n"
-        default=Y
-    elif [ "${2:-}" = "N" ]; then
-        prompt="y/N"
-        default=N
-    else
-        prompt="y/n"
-        default=
-    fi
-
-    while true; do
-
-        # Ask the question (not using "read -p" as it uses stderr not stdout)
-        echo -n "$1 [$prompt] "
-
-        # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
-        read reply </dev/tty
-
-        # Default?
-        if [ -z "$reply" ]; then
-            reply=$default
-        fi
-
-        # Check if the reply is valid
-        case "$reply" in
-            Y*|y*) return 0 ;;
-            N*|n*) return 1 ;;
-        esac
-
-    done
-}
 
 source getPkgMan
 
@@ -193,44 +157,9 @@ setopt dotglob
 setopt histverify
 # some usefull functions
 
-extract () {
-
-  filename=$(basename -- $1)
-  filename="${filename%.*}"
-
-  if [ -f $1 ] ; then
-    case $1 in
-      *.tar.bz2)   tar xvjf $1    ;;
-      *.tar.gz)    tar xvzf $1    ;;
-      *.bz2)       bunzip2 $1     ;;
-      *.rar)       rar x $1       ;;
-      *.gz)        gunzip $1      ;;
-      *.tar)       tar xvf $1     ;;
-      *.tbz2)      tar xvjf $1    ;;
-      *.tgz)       tar xvzf $1    ;;
-      *.zip)       unzip $1       ;;
-      *.Z)         uncompress $1  ;;
-      *.7z)        7z x $1        ;;
-      *)           echo "don't know how to extract '$1'..." ;;
-    esac
-  else
-    echo "'$1' is not a valid file!"
-  fi
-}
-
-echoerr() { echo "$@" 1>&2; }
-
 export CUDA_HOME=/usr/local/cuda
 
 # Runs a ls immediately when you're inside a file.
-cl() {
-  if [ -d $1 ] ; then
-    cd $1
-    ls
-  else
-    echo "'$1' not a dir..."
-  fi
-}
 
 if [ ! -z "$LOAD_ROS_ENV" ] ; then
   source /opt/ros/melodic/setup.bash
@@ -239,31 +168,12 @@ if [ ! -z "$LOAD_ROS_ENV" ] ; then
   source /usr/share/gazebo/setup.sh
 fi
 
-search() {
-  if [ -z "$1" ]; then
-    echo "No argument supplied"
-  elif [ ! -f $1 ]; then
-    echo "file not found"
-  else
-    ack -n $2 $1
-  fi
-}
 
 #comprehensive logs
 if [ ! -d "$HOME/.logs" ]; then
   mkdir $HOME/.logs
 fi
 export LOGPATH=$HOME/.logs
-
-hsearch() {
-  if [ -z "$1" ]; then
-    echo "No argument supplied"
-  elif [ ! -d $LOGPATH ]; then
-    echo "$LOGPATH does not exist. Check that this path is correct."
-  else
-    awk '{$2 = ""; $3 = ""; print $0;}' $LOGPATH/* | ack $1 --color | less -r
-  fi
-}
 
 if [[ $(which conda) = *"not found"* ]]; then
   echo "conda not found"
@@ -300,22 +210,6 @@ fi
 export CHEZMOI_PATH=$HOME/.local/share/chezmoi
 
 #Chezmoi Aware Edit sh function because I keep forgetting to edit the chezmoi files using "chezmoi edit" instead of just editing the local copies.
-cedit(){
-  if [ -z "$1" ]; then
-    echo "No argument supplied"
-  else
-    #get all important names
-    FILENAME="$(basename $1)"
-    CM_FILENAME="dot_${FILENAME#.}"
-    if [[ $(chezmoi source-path "$FILENAME") = *"$CM_FILENAME"* ]]; then 
-      echo "editing managed file"
-      chezmoi edit $(realpath $1);
-    else
-      echo "file not in a source state" 
-      $EDITOR $1
-    fi
-  fi
-}
 
 hostname=$(hostname -d)
 if [ "$hostname" = "noahserver.ele.uri.edu" ]; then
@@ -333,5 +227,3 @@ POWERLEVEL9K_COLOR_SCHEME='light'
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-# Make sure we can access scripts directory
-[[ -d $HOME/.config/scripts ]] && export PATH="$HOME/.config/scripts:$PATH" || echo "scripts directory missing, functionality will be greatly reduced"
