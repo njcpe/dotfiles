@@ -99,6 +99,8 @@ nmap ga <Plug>(EasyAlign)
 
 let g:startify_custom_header = 'startify#center(startify#fortune#cowsay())'
 
+let g:vimtex_fold_enabled = 1
+
 set background=dark
 " default value is "normal", Setting this option to "high" or "low" does use the 
 " same Solarized palette but simply shifts some values up or down in order to 
@@ -144,6 +146,7 @@ let g:vimtex_compiler_progname = 'nvr'
 
 " Latex Preview
 let g:livepreview_previewer = 'zathura'
+let g:livepreview_engine = 'xelatex'
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#autoshow = 1
