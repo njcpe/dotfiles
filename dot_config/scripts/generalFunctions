@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 ask() {
     # https://gist.github.com/davejamesmiller/1965569
     local prompt default reply
@@ -34,24 +35,24 @@ ask() {
 
     done
 }
-
 dirsize() {
   du -hs $* | sort -h
 }
-
 cedit(){
   if [ -z "$1" ]; then
     echo "No argument supplied"
   else
-    #get all important names
-    FILENAME="$(basename $1)"
-    CM_FILENAME="dot_${FILENAME#.}"
-    if [[ $(chezmoi source-path "$FILENAME") = *"$CM_FILENAME"* ]]; then 
-      echo "editing managed file"
-      chezmoi edit $(realpath $1);
-    else
+    echo $1
+    filepath=${$(realpath $1)/./dot_}
+    echo $filepath
+    realname=${filepath/$HOME\//}
+    echo $realname
+    if [[ $(chezmoi source-path "$1") = *"not in source state"* ]]; then 
       echo "file not in a source state" 
       $EDITOR $1
+    else
+      echo "editing managed file"
+      chezmoi edit $(realpath $1);
     fi
   fi
 }
@@ -73,7 +74,6 @@ search() {
     ack -n $2 $1
   fi
 }
-
 cl() {
   if [ -d $1 ] ; then
     cd $1
@@ -82,7 +82,6 @@ cl() {
     echo "'$1' not a dir..."
   fi
 }
-
 extract () {
 
   filename=$(basename -- $1)
@@ -107,6 +106,4 @@ extract () {
     echo "'$1' is not a valid file!"
   fi
 }
-
 echoerr() { echo "$@" 1>&2; }
-
