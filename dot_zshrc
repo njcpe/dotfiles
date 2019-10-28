@@ -178,9 +178,7 @@ export LOGPATH=$HOME/.logs
 export ANACONDA_PATH="$HOME/anaconda3/"
 
 
-if [ ! -d $ANACONDA_PATH ]; then
-  echo "conda not found"
-else
+if [ -d $ANACONDA_PATH ]; then
   # >> conda initialize>>
   # # !! Contents within this block are managed by 'conda init' !!
   __conda_setup="$('$ANACONDA_PATH/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
