@@ -1,7 +1,12 @@
 #!/bin/sh
 
 [ -f "$HOME/.xprofile" ] && . ~/.xprofile
-[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+
+if [[ -f ~/.cache/wal/colors.Xresources ]]; then 
+  xrdb -merge ~/.cache/wal/colors.Xresources
+elif [[ -f ~/.Xresources ]]; then
+  xrdb -merge ~/.Xresources
+fi
 
 source ~/.cache/wal/colors.sh
 

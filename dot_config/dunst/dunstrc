@@ -61,7 +61,7 @@
 
     title = Dunst
     class = Dunst
-    startup_notification = false
+    startup_notification = true
     force_xinerama = false
 [experimental]
     per_monitor_dpi = false
