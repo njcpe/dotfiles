@@ -88,6 +88,7 @@ Plug 'chrisbra/csv.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'iCyMind/NeoSolarized'
+Plug 'joshdick/onedark.vim'
 
 call plug#end()            " required
 
@@ -101,11 +102,16 @@ let g:startify_custom_header = 'startify#center(startify#fortune#cowsay())'
 
 let g:vimtex_fold_enabled = 1
 
+
+
 set background=dark
+
+"enable if you want your retinas scorched
+"set background=light
 " default value is "normal", Setting this option to "high" or "low" does use the 
 " same Solarized palette but simply shifts some values up or down in order to 
 " expand or compress the tonal range displayed.
-let g:neosolarized_contrast = "high"
+let g:neosolarized_contrast = "low"
 
 " Special characters such as trailing whitespace, tabs, newlines, when displayed 
 " using ":set list" can be set to one of three levels depending on your needs. 
@@ -122,7 +128,7 @@ let g:neosolarized_bold = 1
 let g:neosolarized_underline = 1
 let g:neosolarized_italic = 1
 
-colorscheme NeoSolarized
+colorscheme onedark
 
 set splitbelow
 set splitright
@@ -152,7 +158,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#autoshow = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#left_sep = ''
-let g:airline_theme='papercolor'
+let g:airline_theme= 'onedark'
 
 map <C-n> :NERDTreeToggle<CR>
 "set omnifunc=syntaxcomplete#Complete
@@ -166,7 +172,7 @@ function! SyntaxHL()
   hi LineNr       cterm=NONE  ctermbg=15    ctermfg=8     guibg=NONE 
   hi CursorLineNr cterm=NONE  ctermbg=15    ctermfg=8     guibg=NONE    guifg=#859900   gui=bold
   hi CursorLine   cterm=NONE  ctermbg=NONE  ctermfg=NONE  guibg=NONE    guifg=NONE      gui=NONE
-  hi Normal       cterm=NONE  ctermbg=NONE                guibg=NONE                    gui=NONE
+"  hi Normal       cterm=NONE  ctermbg=NONE                guibg=NONE                    gui=NONE
 endfunction
 
 call SyntaxHL()

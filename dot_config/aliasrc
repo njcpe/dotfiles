@@ -123,3 +123,13 @@ alias cma='chezmoi apply -v'
 alias e=cedit
 alias a='sudo apt-fast'
 alias z='zathura'
+
+startNeurosurgeon(){
+  cd ~/repos/neurosurgeon/object_detection
+  aenv ns
+  python udp_testing.py
+}
+
+if [[ "$(hostname -s)" == "noahserver" ]]; then
+  alias ns=startNeurosurgeon
+fi

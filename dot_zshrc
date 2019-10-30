@@ -45,6 +45,9 @@ setopt HIST_VERIFY               # Don't execute immediately upon history expans
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 source $ZSH/oh-my-zsh.sh
 # User configuration
+
+setopt CORRECT
+
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
