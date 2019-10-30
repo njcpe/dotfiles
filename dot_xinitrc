@@ -1,6 +1,5 @@
 #!/bin/sh
 
-[ -f "$HOME/.xprofile" ] && . ~/.xprofile
 
 if [[ -f ~/.cache/wal/colors.Xresources ]]; then 
   xrdb -merge ~/.cache/wal/colors.Xresources
@@ -9,7 +8,10 @@ elif [[ -f ~/.Xresources ]]; then
 fi
 
 source ~/.cache/wal/colors.sh
+source ~/.local/bin/dunstWal
 
+[ -f "$HOME/.xprofile" ] && . ~/.xprofile
+dunstWal
 export color0_alpha="#22${color0/'#'}"
 export color1_alpha="#22${color1/'#'}"
 export color2_alpha="#22${color2/'#'}"
