@@ -8,7 +8,7 @@
 # export TERMINAL="st"
 
 # #---Basic Definitions---# #
-for_window [class="^.*"] border pixel 2
+for_window [class="^.*"] border pixel 3
 gaps inner 15
 gaps outer 15
 set $term --no-startup-id $TERMINAL
@@ -26,14 +26,17 @@ for_window [instance="dropdown_tmuxdd"] border pixel 3
 for_window [instance="dropdown_dropdowncalc"] border pixel 2
 for_window [instance="dropdown_*"] move position center
 
+
+#Use i3Blocks
 #bar {
-#	font pango:mono 10
-# status_command i3blocks
-# position top
-#	mode dock
-#	modifier None
+#  font pango:mono 10
+#  status_command i3blocks
+#  position top
+#  mode dock
+#  modifier None
 #}
 
+#Uncomment this to use polybar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # #---Basic Bindings---# #

@@ -77,6 +77,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-easy-align'
+Plug 'matze/vim-ini-fold'
+Plug 'edkolev/promptline.vim'
 
 " === Language Support ===
 Plug 'lervag/vimtex'

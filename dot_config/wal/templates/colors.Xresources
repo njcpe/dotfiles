@@ -19,9 +19,9 @@ URxvt*borderColor:  {background.alpha}
 
 ! Colors 0-15.
 *.color0: {color0}
-*.color0a: #22{color0.strip}
+*.color0a: #01{color0.strip}
 *color0:  {color0}
-*color0a: #22{color0.strip}
+*color0a: #01{color0.strip}
 *.color1: {color1}
 *color1:  {color1}
 *.color2: {color2}
