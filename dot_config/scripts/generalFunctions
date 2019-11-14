@@ -47,7 +47,7 @@ cedit(){
     echo $filepath
     realname=${filepath/$HOME\//}
     echo $realname
-    if [[ $(chezmoi source-path "$1") = *"not in source state"* ]] || [[ $(chezmoi source-path "$1") = *"does not exist"* ]]; then 
+    if [[ $(chezmoi source-path "$1") = *"not in source state"* ]] || [[ $(chezmoi source-path "$1") = *"does not exist"* ]] || [[ $(chezmoi source-path "$1") = *"outside target directory"* ]]; then 
       echo "file not in a source state"
       $EDITOR $1
     else
