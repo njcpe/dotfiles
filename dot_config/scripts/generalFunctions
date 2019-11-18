@@ -106,4 +106,9 @@ cl() {
 #     echo "'$1' is not a valid file!"
 #   fi
 # }
-echoerr() { echo "$@" 1>&2; }
+echoerr() { 
+  echo "$@" 1>&2;
+}
+gi() { 
+  curl -sLw n https://www.gitignore.io/api/$@ ;
+}
