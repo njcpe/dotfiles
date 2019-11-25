@@ -1,0 +1,6 @@
+#!/bin/zsh # HSTR configuration - source this to ~/.zshrc
+export HSTR_CONFIG=hicolor,ranking-view       # get more colors
+export HISTCONTROL=ignoredups, ignorespace    # leading space hides commands from history
+# ensure synchronization between Bash memory and history file
+export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
+bindkey -s "\C-r" "\eqhstr --\n" 
