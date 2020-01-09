@@ -18,7 +18,7 @@ super + i
 super + y
 	$TERMINAL -e calcurse
 super + shift + a
-	$TERMINAL -e pulsemixer; pkill -RTMIN+10 i3blocks
+	$TERMINAL -e pulsemixer; #pkill -RTMIN+10 i3blocks
 super + shift + m
   exec nohup qutebrowser open.spotify.com
 super + shift + c
@@ -26,7 +26,7 @@ super + shift + c
 super + shift + e
 	tutorialvids
 super + w
-	webby | xargs -r $BROWSER
+  qutebrowser google.com
 super + shift + w
 	$BROWSER
 super + shift + g
@@ -44,10 +44,9 @@ super + shift + x
 super + shift + BackSpace
 	prompt "Reboot computer?" "sudo -A shutdown -r now"
 super + x
-	mpc pause; pauseallmpv; i3lock -e -f -t -i $HOME/.config/wall.png; xset dpms force off
+	mpc pause; pauseallmpv; lock; xset dpms force off
 XF86Launch1
 	xset dpms force off
-
 # Recording
 # Take screenshot
 Print

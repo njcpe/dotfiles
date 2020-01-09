@@ -121,7 +121,6 @@ alias cm='chezmoi'
 alias cmd='chezmoi diff | colordiff'
 alias cma='chezmoi apply -v'
 alias e=cedit
-alias a='sudo apt-fast'
 alias z='zathura'
 
 startNeurosurgeon(){

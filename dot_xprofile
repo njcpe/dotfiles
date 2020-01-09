@@ -1,5 +1,5 @@
 #!/bin/sh
-
+ckb-next-daemon & #start corsair sw
 setbg &		# Set the background
 sxhkd &	# Bind keys
 # Switch to US international with Caps as Mod/Escape
@@ -11,4 +11,4 @@ unclutter &		# Remove mouse when idle
 xcompmgr &		# xcompmgr for transparency
 dunstWal &			# dunst for notifications
 mpdupdate &
-redshift &
+redshift -t 6500:3000 -b 1.0:0.5 &

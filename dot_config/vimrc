@@ -90,8 +90,7 @@ Plug 'chrisbra/csv.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'iCyMind/NeoSolarized'
-Plug 'joshdick/onedark.vim'
-
+Plug 'rakr/vim-one'
 call plug#end()            " required
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -104,12 +103,23 @@ let g:startify_custom_header = 'startify#center(startify#fortune#cowsay())'
 
 let g:vimtex_fold_enabled = 1
 
+let colorMode = $LIGHT_MODE
 
-
-set background=dark
+if colorMode == 1
+  colorscheme one
+  set background=light
+  let g:airline_theme= 'one'
+else
+  colorscheme one
+  set background=dark
+  let g:airline_theme= 'onedark'
+endif
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+command! ProjectFiles execute 'Files' s:find_git_root() 
 
 "enable if you want your retinas scorched
-"set background=light
 " default value is "normal", Setting this option to "high" or "low" does use the 
 " same Solarized palette but simply shifts some values up or down in order to 
 " expand or compress the tonal range displayed.
@@ -130,7 +140,6 @@ let g:neosolarized_bold = 1
 let g:neosolarized_underline = 1
 let g:neosolarized_italic = 1
 
-colorscheme onedark
 
 set splitbelow
 set splitright
@@ -160,7 +169,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#autoshow = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#left_sep = ''
-let g:airline_theme= 'onedark'
+"let g:airline_theme= 'onedark'
 
 map <C-n> :NERDTreeToggle<CR>
 "set omnifunc=syntaxcomplete#Complete
