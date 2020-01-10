@@ -11,4 +11,4 @@ unclutter &		# Remove mouse when idle
 xcompmgr &		# xcompmgr for transparency
 dunstWal &			# dunst for notifications
 mpdupdate &
-redshift -t 6500:3000 -b 1.0:0.5 &
+redshift &

@@ -79,7 +79,7 @@ Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'matze/vim-ini-fold'
 Plug 'edkolev/promptline.vim'
-
+Plug 'chrisbra/unicode.vim'
 " === Language Support ===
 Plug 'lervag/vimtex'
 Plug 'xuhdev/vim-latex-live-preview'
