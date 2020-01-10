@@ -113,7 +113,6 @@ alias gp='git push'
 alias addr='ifconfig | grep "inet addr" -m 1'
 alias chr='nohup google-chrome'
 alias gA='git add -A'
-alias gp='cat ~/.github_token | xclip -selection c; git push'
 alias jnbs="jupyter notebook --no-browser --port=8889"
 alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodelet robot_state_publisher gzclient'
 #alias bc='bc -l'
