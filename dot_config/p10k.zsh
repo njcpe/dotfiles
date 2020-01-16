@@ -49,6 +49,7 @@ setopt no_unset
   context                   # user@host
   status
   vi_mode
+  anaconda
 )
 
   # Basic style options that define the overall prompt look.

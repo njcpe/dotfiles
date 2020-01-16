@@ -81,6 +81,7 @@ Plug 'matze/vim-ini-fold'
 Plug 'edkolev/promptline.vim'
 
 " === Language Support ===
+Plug 'sheerun/vim-polyglot'
 Plug 'lervag/vimtex'
 Plug 'xuhdev/vim-latex-live-preview'
 Plug 'vimwiki/vimwiki'
@@ -91,7 +92,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'iCyMind/NeoSolarized'
 Plug 'joshdick/onedark.vim'
-
+Plug 'rakr/vim-one'
 call plug#end()            " required
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
