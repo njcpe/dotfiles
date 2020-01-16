@@ -1,5 +1,5 @@
 #!/bin/sh
-
+ckb-next-daemon & #start corsair sw
 setbg &		# Set the background
 sxhkd &	# Bind keys
 # Switch to US international with Caps as Mod/Escape
