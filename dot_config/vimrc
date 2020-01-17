@@ -81,6 +81,7 @@ Plug 'matze/vim-ini-fold'
 Plug 'edkolev/promptline.vim'
 Plug 'chrisbra/unicode.vim'
 " === Language Support ===
+Plug 'sheerun/vim-polyglot'
 Plug 'lervag/vimtex'
 Plug 'xuhdev/vim-latex-live-preview'
 Plug 'vimwiki/vimwiki'

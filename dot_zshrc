@@ -3,7 +3,7 @@
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 DEFAULT_USER=$(whoami)
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+#export ZSH="$HOME/.oh-my-zsh"
 
 # Load Antigen
 source ~/.config/antigen.zsh
@@ -47,7 +47,6 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
-source $ZSH/oh-my-zsh.sh
 # User configuration
 
 setopt CORRECT
@@ -187,7 +186,7 @@ export ANACONDA_PATH="$HOME/anaconda3/"
 if [ -d $ANACONDA_PATH ]; then
   # >> conda initialize>>
   # # !! Contents within this block are managed by 'conda init' !!
-  __conda_setup="$('$ANACONDA_PATH/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+  __conda_setup="$("$ANACONDA_PATH/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
   if [ $? -eq 0 ]; then
     eval "$__conda_setup"
   else
@@ -199,16 +198,6 @@ if [ -d $ANACONDA_PATH ]; then
   fi
   unset __conda_setup
   # <<  conda initialize<<
-  if [[ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]]; then
-    . "$HOME/anaconda3/etc/profile.d/conda.sh"
-    if [[ -z ${CONDA_PREFIX+x} ]]; then
-      export PATH="$HOME/anaconda3/bin:$PATH"
-    fi
-  fi
-
-  #this line deals with the fairly annoying default behavior that conda exhibits when spawing new shell TODO: create bug report with Conda Repo (3/27/19).
-  # Relevant issue rpt: https://github.com/conda/conda/issues/8211#issuecomment-471710111
-  conda deactivate
 fi
 
 #better binary calculator setup
@@ -227,9 +216,7 @@ fi
 
 # source $HOME/.bashrc.task
 [[ -f $HOME/.config/zhstrconf ]] && source $HOME/.config/zhstrconf
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f $HOME/.config/p10k.zsh ]] && source $HOME/.config/p10k.zsh
-#POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 POWERLEVEL9K_COLOR_SCHEME='light'
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
