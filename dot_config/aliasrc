@@ -122,6 +122,7 @@ alias cmd='chezmoi diff | colordiff'
 alias cma='chezmoi apply -v'
 alias e=cedit
 alias z='zathura'
+alias lofi='youtube-viewer https:\/\/www.youtube.com\/watch?v=hHW1oY26kxQ -n' #stream chilled cow lofi hip-hop
 
 startNeurosurgeon(){
   cd ~/repos/neurosurgeon/object_detection
