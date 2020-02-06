@@ -12,6 +12,7 @@ set ignorecase
 " And so is Artificial Intelligence!
 set smartcase
 
+set clipboard=unnamedplus
 " This is totally awesome - remap jj to escape in insert mode.  You'll never type jj anyway, so it's great!
 inoremap jj <Esc>
 
@@ -70,6 +71,7 @@ Plug 'tpope/vim-rhubarb'
 Plug 'mhinz/vim-signify'
 
 " === IDE-Like Enhancements ===
+Plug 'jiangmiao/auto-pairs'
 Plug 'mhinz/vim-startify'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'scrooloose/nerdtree'
@@ -92,6 +94,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'iCyMind/NeoSolarized'
 Plug 'rakr/vim-one'
+Plug 'ryanoasis/vim-devicons'
 call plug#end()            " required
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)

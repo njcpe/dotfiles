@@ -104,16 +104,19 @@ fi
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# Alias definitions.
-[[ -f $HOME/.config/aliasrc ]] && source $HOME/.config/aliasrc
 
 # Make sure we can access scripts directory
 if [[ -d $HOME/.config/scripts ]]; then
   export PATH="$HOME/.config/scripts:$PATH"
+
+  source $HOME/.config/scripts/fzf-tools
   source $HOME/.config/scripts/generalFunctions
 else
   echo "scripts directory missing, functionality will be greatly reduced"
 fi
+
+# Alias definitions. must be sourced AFTER generalFunctions 
+[[ -f $HOME/.config/aliasrc ]] && source $HOME/.config/aliasrc
 
 # symlinks.
 if [ -d "$HOME/.config/symlinks" ]; then
@@ -208,11 +211,11 @@ export CHEZMOI_PATH=$HOME/.local/share/chezmoi
 
 #Chezmoi Aware Edit sh function because I keep forgetting to edit the chezmoi files using "chezmoi edit" instead of just editing the local copies.
 
-hostname=$(hostname -d)
+hostname=$(hostname -f)
 if [ "$hostname" = "noahserver.ele.uri.edu" ]; then
   #Task Warrior server
   export TASKDDATA=/var/taskd
-  [ ! -d "$TASKDDATA" ] && mkdir -p $TASKDDATA;
+  [ ! -d "$TASKDDATA" ] && sudo mkdir -p $TASKDDATA;
 fi
 
 # source $HOME/.bashrc.task

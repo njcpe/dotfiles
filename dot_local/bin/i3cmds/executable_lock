@@ -37,7 +37,7 @@ lock() {
 #    --timepos="x+w/2:h-h/6" \
 #    --datestr="" \
 #    --clock \
-    --indicator
+#    --indicator
 
   killall -SIGUSR2 dunst
 }

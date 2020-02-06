@@ -30,6 +30,8 @@ command -v nvim >/dev/null && alias vim="nvim" vimdiff="nvim -d" # Use neovim fo
 
 vf() { fzf | xargs -r -I % $EDITOR % ;}
 
+alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
 alias vim='nvim'
 alias v='nvim'
 # enable color support of ls and also add handy aliases
